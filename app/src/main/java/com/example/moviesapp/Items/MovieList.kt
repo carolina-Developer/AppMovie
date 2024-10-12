@@ -1,10 +1,13 @@
 package com.example.moviesapp.Items
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import coil.compose.rememberImagePainter
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
@@ -24,21 +27,31 @@ import com.example.moviesapp.Model.Movie
 fun moviesList(
     moviesList: List<Movie>
 ){
-    var selected by remember {
-        mutableStateOf<Movie?>(null)
-    }
-    LazyColumn {
-        items(moviesList){ movie ->
-            Card(
-                modifier = Modifier.padding(16.dp)
-            ){
-                Column{
-                    AsyncImage(model = movie.img, contentDescription = "Movie Image")
-                    Text(text = "Title: "+movie.title)
-                    Text(text = "Year: "+ movie.year)
+    var rows by remember { mutableStateOf(listOf<List<Movie>>()) }
+    rows = moviesList.chunked(3)
+    LazyColumn{
+
+        item{
+            rows.forEach{ row ->
+                Row{
+                    row.forEach{ movie ->
+                        Card(
+                            modifier = Modifier
+                                .width(130.dp)
+                                .height(180.dp)
+                                .padding(all = 12.dp)
+                        ){
+                            AsyncImage(model = movie.img, contentDescription = "Movie Image")
+                            Text(text = "Title: "+movie.title)
+                            Text(text = "Year: "+ movie.year)
+                        }
+                    }
                 }
             }
-
         }
     }
 }
+/*
+AsyncImage(model = movie.img, contentDescription = "Movie Image")
+Text(text = "Title: "+movie.title)
+Text(text = "Year: "+ movie.year)*/
